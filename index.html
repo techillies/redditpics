@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+    <title>YS Reddit App</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body ng-controller="mainController">
+
+	<!-- header begins-->
+    <header>
+        <div class="col-md-12 col-xs-12 col-lg-12">
+            <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand" href="#" ng-click="backToHome()">Get My Images </a>
+                <div class="collapse navbar-collapse" id="navbarText">
+                    <form class="form-inline">
+                        <input class="form-control mr-sm-2" ng-model="searchTitle" type="text" placeholder="Search by title">
+                    </form>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!-- header begins-->
+
+    <!-- Image thumbnails section begins -->
+    <div class="image-container col-md-12 row" ng-hide="showDetailedView">
+        <div class="card col-md-2 card-wrapper" ng-repeat="img in imageThumbnails | filter:searchTitle" ng-hide="{{ img.data.is_self}}" ng-click="showDetailedImageView(img)">
+            <img ng-src="{{ img.data.thumbnail}}" alt="{{img.data.name}}" height="100" />
+            <div class="card-block">
+                <!--<h4 class="card-title"></h4>-->
+                <p class="card-text thumb-title">{{ img.data.title}}</p>
+                <div class="hidden-title">{{ img.data.title}}</div>
+                <a href="#" class="btn btn-sm btn-primary" ng-click="showDetailedImageView(img)">View Full Details</a>
+            </div>
+        </div>
+    </div>
+    <!-- Image thumbnails section ends -->
+
+
+    <!-- Clicked image details begins-->
+    <div class="image-details-wrapper row col-md-12" ng-show="showDetailedView">
+        <div class="col-md-12 row">
+            <div class="actual-image col-md-5">
+                <div class="image-holder">
+                    <img ng-src="{{ clickedImageDetails.data.url}}" alt="{{clickedImageDetails.data.name}}" />
+                </div>
+            </div>
+            <div class="col-md-7">
+                <h4>{{ clickedImageDetails.data.title}} <small>({{ clickedImageDetails.data.domain}})</small></h4>
+                <div>Submitted by {{ clickedImageDetails.data.author}}</div>
+                <small>{{clickedImageDetails.data.num_comments}} comments | {{ clickedImageDetails.data.ups}} points</small>
+                <button class="btn btn-sm btn-danger float-md-right" ng-click="backToHome()" >Home</button>
+                <hr />
+
+                <!-- Comments section begins -->
+                <div class="comments">
+                    <div ng-repeat="comment in comments">
+                        <div class="text-primary">
+                            {{comment.data.author}}
+                            <small class="text-muted">{{comment.data.ups}} points</small>
+                        </div>
+                        <small>{{comment.data.body}}</small>
+                        <div class="replies-wrapper">
+                            <div ng-if="comment.data.replies !== ' ' ">
+                                <div class="reply" ng-repeat="reply in comment.data.replies.data.children">
+                                    <div class="text-primary">
+                                        {{reply.data.author}}
+                                        <small class="text-muted">{{reply.data.ups}} points</small>
+                                    </div>
+                                    <small>{{reply.data.body}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Comments section Ends -->
+            </div>
+        </div>
+        <!-- Clicked image details ends -->
+
+        <!-- Add scripts below -->
+        <script src="js/jquery-3.2.0.min.js"></script>
+        <script src="js/tether.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/angular.min.js"></script>
+        <script src="js/app.js"></script>
+</body>
+
+</html>
